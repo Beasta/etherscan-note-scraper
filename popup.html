@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.css" />
+    <script src="scrape.js"></script>
+  </head>
+  <body>
+    <div id="not-on-etherscan">
+      <p>
+        You're not on the Etherscan Address Private Notes page.
+        In order to continue you have to go there. Do it now?
+      </p>
+      <button id="go-to-etherscan">GO THERE</button>
+      <button id="open-etherscan">OPEN IN A NEW TAB</button>
+    </div>
+    <div id="on-etherscan">
+      <p>
+        This extension scrapes your address private notes from Etherscan.
+        The results will be donloaded in JSON format.
+      </p>
+      <button id="scrape">SCRAPE</button>
+    </div>
+    <div id="error"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>

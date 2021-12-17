@@ -38,7 +38,7 @@ const getAllNotes = async () => {
 
   while (true) {
     const url = `https://etherscan.io/mynotes_address?p=${i}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {mode: 'no-cors'});
     const result = await response.text();
     const doc = new window.DOMParser().parseFromString(result, 'text/html');
     const notes = getNotes(doc);
@@ -53,4 +53,9 @@ const getAllNotes = async () => {
   return allNotes;
 };
 
-getAllNotes().then(console.log)
+etherScan = {
+  getNotes,
+  getAllNotes
+};
+
+// getAllNotes().then(console.log)
