@@ -1,0 +1,19 @@
+body {
+  font-size: medium;
+}
+
+button {
+  width: 400px;
+  margin: 3px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+div {
+  display: none;
+}
+
+#error {
+  font-weight: bold;
+  color: brown;
+}
