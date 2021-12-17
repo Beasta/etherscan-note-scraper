@@ -1,0 +1,15 @@
+a {
+    display: none;
+}
+
+#scrape {
+    display: block;
+}
+
+#prompt {
+    display: none;
+}
+
+#download {
+    display: none;
+}
