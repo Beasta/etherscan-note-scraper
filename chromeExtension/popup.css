@@ -1,0 +1,101 @@
+button {
+    text-align: center;
+    width: 90vw;
+    outline: none;
+    margin: 5px;
+    border: black;
+    border-radius: 2px;
+    background-color: yellowgreen;
+    box-shadow: black;
+    cursor: pointer;
+    color: white;
+    font-size: 16px;
+}
+
+h3 {
+    text-align: center;
+    font-weight: bold;
+}
+
+p {
+    text-align: center;
+}
+
+table {
+    border: 2px;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 3px;
+    width: auto;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+a {
+    display: none;
+}
+
+input[type=text] {
+    padding: 6px;
+    margin-top: 8px;
+    font-size: 17px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: black;
+    width: 76vw;
+}
+
+#scrape {
+    display: block;
+}
+
+#scrapeButton {
+    height: 40vh;
+}
+
+#prompt {
+    display: none;
+}
+
+#yesButton {
+    height: 20vh;
+}
+
+#noButton {
+    height: 20vh;
+    background-color: red;
+}
+
+#notes {
+    display: none;
+    align-content: center;
+}
+
+#downloadButton {
+    height: 30px;
+    width: 95vw;
+    display: none;
+}
+
+#search {
+    display: none;
+    margin: 0 auto;
+}
+
+#search button {
+    float: right;
+    padding: 6px;
+    margin-top: 8px;
+    margin-right: 16px;
+    background-color: deepskyblue;
+    border: none;
+    width: auto;
+}
