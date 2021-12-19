@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Etherscan.io Note Scraper",
+  "description": "A tool to scrape address private notes from https://etherscan.io",
+  "version": "0.1",
+  "permissions": [
+    "tabs"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "19": "icon.png"
+    }
+  },
+  "icons": {
+    "19": "icon.png"
+  },
+  "host_permissions": [
+    "https://etherscan.io/*"
+  ]
+}
