@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', async() => {
         addressNotes = items.data;
         displayNotes = items.data;
         // alert(displayNotes.length);
-        generateNotesTable();
+        if(addressNotes.length > 0){
+            generateNotesTable();
+        }
         // console.log(items);
     });
     /**
@@ -126,12 +128,13 @@ document.addEventListener('DOMContentLoaded', async() => {
      * Either displays all scraped address note values, or address note values returned in a search.
      */
     function generateNotesTable() {
+        chrome.storage.sync.set({ "data": displayNotes}, function(){
+            // alert("hello");
+        });
         if (addressNotes.length === 0) {
             generateError("There are no address notes");
         } else {
-            chrome.storage.sync.set({ "data": displayNotes}, function(){
-                // alert("hello");
-            });
+          
             // chrome.storage.sync.set({ "data2": displayNotes}, function(){
             //     // alert("hello");
             // });
