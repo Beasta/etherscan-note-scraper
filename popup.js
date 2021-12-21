@@ -14,7 +14,14 @@ document.addEventListener('DOMContentLoaded', async() => {
 
     let addressNotes; // address notes returned from a scrape
     let displayNotes; // address notes being displayed in a table, whether all or just those returned from a search
-
+    chrome.storage.sync.get(/* String or Array */["data"], function(items){
+        //  items = [ { "phasersTo": "awesome" } ]
+        addressNotes = items.data;
+        displayNotes = items.data;
+        // alert(displayNotes.length);
+        generateNotesTable();
+        // console.log(items);
+    });
     /**
      * Retrieves the currently focused tab
      * @returns {Promise<*>}
@@ -122,11 +129,18 @@ document.addEventListener('DOMContentLoaded', async() => {
         if (addressNotes.length === 0) {
             generateError("There are no address notes");
         } else {
+            chrome.storage.sync.set({ "data": displayNotes}, function(){
+                // alert("hello");
+            });
+            // chrome.storage.sync.set({ "data2": displayNotes}, function(){
+            //     // alert("hello");
+            // });
+
             document.getElementById("notes").style.display = "block";
             document.getElementById("search").style.display = "block";
-            document.getElementById("scrape").style.display = "none";
+            // document.getElementById("scrape").style.display = "none";
             document.getElementById("downloadButton").style.display = "block";
-
+            scrapeButton.innerText = "SCRAPE";
             let div = document.getElementById("notes-table");
             let table = document.createElement("table");
             let tableBody = document.createElement("tbody");
