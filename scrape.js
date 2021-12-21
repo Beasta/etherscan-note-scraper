@@ -4,8 +4,8 @@
 
 const getNotes = (document) => {
   const figure = document.getElementById('SVGdataReport1');
-  if (! figure) {
-    throw new Error('Could not find SVGdataReport1')
+  if (!figure) {
+    throw new Error('Could not find SVGdataReport1');
   }
 
   const table = figure.firstElementChild;
@@ -17,7 +17,7 @@ const getNotes = (document) => {
 
   const list = [];
 
-  body.childNodes.forEach(element => {
+  body.childNodes.forEach((element) => {
     if (element.nodeName !== 'TR') {
       return;
     }
@@ -26,7 +26,9 @@ const getNotes = (document) => {
     const address = element.childNodes[3].childNodes[0].textContent.trim();
     const note = element.childNodes[3].childNodes[1].textContent.trim();
     const dateCreated = element.childNodes[4].textContent;
-    list.push({ address, nameTag, note, dateCreated });
+    list.push({
+      address, nameTag, note, dateCreated,
+    });
   });
 
   return list;
@@ -36,6 +38,7 @@ const getAllNotes = async () => {
   let allNotes = [];
   let i = 1;
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const url = `https://etherscan.io/mynotes_address?p=${i}`;
     const response = await fetch(url);
@@ -47,10 +50,11 @@ const getAllNotes = async () => {
     if (notes.length === 0) {
       break;
     }
-    i++;
+    i += 1;
   }
 
   return allNotes;
 };
 
-getAllNotes().then(console.log)
+// eslint-disable-next-line no-console
+getAllNotes().then(console.log);
