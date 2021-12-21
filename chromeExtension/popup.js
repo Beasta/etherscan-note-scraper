@@ -31,11 +31,12 @@ document.addEventListener('DOMContentLoaded', async() => {
      * Otherwise, user is prompted to open the tab to 'https://etherscan.io/mynotes_address?p=1'.
      */
     scrapeButton.addEventListener("click", async () => {
-        scrapeButton.innerText = "SCRAPING...";
-
         const tab = await getTab(); // retrieve the currently focused tab
 
         if (tab.url.match(/https:\/\/etherscan.io\/mynotes_address(\?p=1)?/)) {
+            scrapeButton.disabled = "true";
+            scrapeButton.innerText = "SCRAPING...";
+
             try {
                 addressNotes = await getAllNotes();
                 displayNotes = addressNotes;
@@ -46,7 +47,6 @@ document.addEventListener('DOMContentLoaded', async() => {
         } else {
             document.getElementById("prompt").style.display = "block";
             document.getElementById("scrape").style.display = "none";
-            scrapeButton.innerText = "SCRAPE";
         }
     });
 
