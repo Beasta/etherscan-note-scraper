@@ -10,5 +10,5 @@ Scrape your address and transaction notes out of etherscan
 After these steps the extension will appear in Google
 
 ## Connect
-Join the conversation at https://keybase.io/team/addressnotes or just DM me on keybase @barryblaha
+Join the conversation at https://keybase.io/team/addressnotes or just DM me on keybase @barryblaha . There will be opportunities posted on keybase before they are available on gitcoin.
 
