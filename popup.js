@@ -16,6 +16,22 @@ document.addEventListener('DOMContentLoaded', async() => {
     let displayNotes; // address notes being displayed in a table, whether all or just those returned from a search
 
     /**
+     * Get data from storage when popup loads and display any stored address note values in a table
+     */
+    chrome.storage.sync.get(["addressNotes", "displayNotes"], async function (storedData) {
+        addressNotes = storedData.addressNotes;
+        displayNotes = storedData.displayNotes;
+
+        if (addressNotes) {
+            if (await isTabOnEtherScanAddressNotesPage()) {
+                generateNotesTable();
+            } else {
+                promptToOpenEtherScanAddressNotesPage();
+            }
+        }
+    });
+
+    /**
      * Retrieves the currently focused tab
      * @returns {Promise<*>}
      */
@@ -26,27 +42,51 @@ document.addEventListener('DOMContentLoaded', async() => {
     }
 
     /**
+     * Boolean conditional for if the currently focused tab is: https://etherscan.io/mynotes_address?p=1
+     * @returns {Promise<RegExpMatchArray>}
+     */
+    async function isTabOnEtherScanAddressNotesPage() {
+        const tab = await getTab(); // retrieve the currently focused tab
+        return tab.url.match(/https:\/\/etherscan.io\/mynotes_address(\?p=1)?/);
+    }
+
+    /**
+     * Displays a prompt for opening: https://etherscan.io/mynotes_address?p=1
+     * Hides SCRAPE button and any scraped address note data, along with the search feature and download button
+     */
+    function promptToOpenEtherScanAddressNotesPage() {
+        document.getElementById("prompt").style.display = "block";
+        document.getElementById("scrape").style.display = "none";
+        document.getElementById("notes").style.display = "none";
+    }
+
+    /**
      * Event handler for when the SCRAPER button is clicked.
      * Address notes are scraped if the currently focused tab is 'https://etherscan.io/mynotes_address?p=1'.
      * Otherwise, user is prompted to open the tab to 'https://etherscan.io/mynotes_address?p=1'.
      */
     scrapeButton.addEventListener("click", async () => {
-        const tab = await getTab(); // retrieve the currently focused tab
-
-        if (tab.url.match(/https:\/\/etherscan.io\/mynotes_address(\?p=1)?/)) {
-            scrapeButton.disabled = "true";
-            scrapeButton.innerText = "SCRAPING...";
-
+        if (await isTabOnEtherScanAddressNotesPage()) {
             try {
+                scrapeButton.disabled = true; // disable the SCRAPE button while scraping address notes
+                scrapeButton.innerText = "SCRAPING...";
+
                 addressNotes = await getAllNotes();
                 displayNotes = addressNotes;
                 generateNotesTable();
+
+                scrapeButton.disabled = false; // re-enable the SCRAPE button while scraping address notes
+                scrapeButton.innerText = "SCRAPE";
+
+                // remove any prior search from the input element
+                if (addressNotes.length === displayNotes.length) {
+                    document.getElementById("searchInput").value = "";
+                }
             } catch (err) {
                 generateError(err.message);
             }
         } else {
-            document.getElementById("prompt").style.display = "block";
-            document.getElementById("scrape").style.display = "none";
+            promptToOpenEtherScanAddressNotesPage();
         }
     });
 
@@ -58,7 +98,12 @@ document.addEventListener('DOMContentLoaded', async() => {
         const tab = await getTab();
         await chrome.tabs.update(tab.id, { url: "https://etherscan.io/mynotes_address?p=1" });
 
+        if (addressNotes !== null) {
+            generateNotesTable();
+        }
+
         document.getElementById("scrape").style.display = "block";
+        document.getElementById("notes").style.display = "block";
         document.getElementById("prompt").style.display = "none";
     });
 
@@ -76,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async() => {
      * Closes the window.
      */
     downloadButton.addEventListener("click", async () => {
-        downloadButton.disabled = "true"; // disable the DOWNLOAD button while downloading JSON file
+        downloadButton.disabled = true; // disable the DOWNLOAD button while downloading JSON file
         downloadButton.innerText = "DOWNLOADING...";
 
         const dataString = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(addressNotes));
@@ -119,15 +164,19 @@ document.addEventListener('DOMContentLoaded', async() => {
      * Either displays all scraped address note values, or address note values returned in a search.
      */
     function generateNotesTable() {
-        if (addressNotes.length === 0) {
-            generateError("There are no address notes");
-        } else {
-            document.getElementById("notes").style.display = "block";
+        let div = document.getElementById("notes-table");
+        div.innerHTML = "";
+
+        // persistently store the address note data
+        chrome.storage.sync.set({
+            'addressNotes': addressNotes,
+            'displayNotes': displayNotes
+        });
+
+        if (addressNotes.length > 0) {
             document.getElementById("search").style.display = "block";
-            document.getElementById("scrape").style.display = "none";
             document.getElementById("downloadButton").style.display = "block";
 
-            let div = document.getElementById("notes-table");
             let table = document.createElement("table");
             let tableBody = document.createElement("tbody");
 
@@ -184,8 +233,14 @@ document.addEventListener('DOMContentLoaded', async() => {
             }
 
             table.appendChild(tableBody);
-            div.innerHTML = "";
             div.appendChild(table);
+        } else {
+            document.getElementById("search").style.display = "none";
+            document.getElementById("downloadButton").style.display = "none";
+
+            let paragraph = document.createElement("p");
+            paragraph.innerHTML = "There are no address notes";
+            div.appendChild(paragraph);
         }
     }
 
@@ -194,10 +249,10 @@ document.addEventListener('DOMContentLoaded', async() => {
      * @param message the error message
      */
     function generateError(message) {
-        document.getElementById("notes").style.display = "block";
-        document.getElementById("scrape").style.display = "none";
+        document.getElementById("notes").style.display = "none";
+        document.getElementById("scrape").style.display = "block";
 
-        let div = document.getElementById("notes");
+        let div = document.getElementById("scrape");
         let paragraph = document.createElement("p");
         paragraph.innerHTML = "Scraping returned error: " + message;
         div.appendChild(paragraph);
