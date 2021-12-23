@@ -75,14 +75,18 @@ input[type=text] {
 }
 
 #notes {
-    display: none;
     align-content: center;
 }
 
 #downloadButton {
     height: 30px;
-    width: 95vw;
+    width: 96vw;
     display: none;
+}
+
+#scrapeButton {
+    height: 30px;
+    width: 96vw;
 }
 
 #search {
