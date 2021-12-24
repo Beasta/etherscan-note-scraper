@@ -37,23 +37,19 @@ const getNotes = (document) => {
 const getAllNotes = async () => {
   let allNotes = [];
   let i = 1;
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
+  let notes = ['', ''];
+  while (notes.length !== 0) {
     const url = `https://etherscan.io/mynotes_address?p=${i}`;
     const response = await fetch(url);
     const result = await Promise.all(response.text());
     const doc = new window.DOMParser().parseFromString(result, 'text/html');
-    const notes = getNotes(doc);
+    notes = getNotes(doc);
     allNotes = allNotes.concat(notes);
 
-    if (notes.length === 0) {
-      break;
-    }
     i += 1;
   }
 
   return allNotes;
 };
 
-// eslint-disable-next-line no-console
-getAllNotes().then(console.log);
+getAllNotes().then();
