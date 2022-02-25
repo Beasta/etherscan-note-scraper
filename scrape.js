@@ -41,7 +41,7 @@ const getAllNotes = async () => {
   while (notes.length !== 0) {
     const url = `https://etherscan.io/mynotes_address?p=${i}`;
     const response = await fetch(url);
-    const result = await response.text();
+    const result = await Promise.all(response.text());
     const doc = new window.DOMParser().parseFromString(result, 'text/html');
     notes = getNotes(doc);
     allNotes = allNotes.concat(notes);
